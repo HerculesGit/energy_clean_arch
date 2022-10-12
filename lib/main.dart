@@ -1,12 +1,17 @@
+import 'package:energy_clean_arch/presentation/controllers/energy_battery_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'config/routes/app_routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
     MultiProvider(
-      providers: [],
+      providers: [
+        ChangeNotifierProvider(create: (context) => EnergyBatteryState())
+      ],
       child: const MyApp(),
     ),
   );
@@ -18,10 +23,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Calc',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      onGenerateRoute: AppRoutes.onGenerateRoutes,
     );
   }
 }
