@@ -5,8 +5,21 @@ import 'package:provider/provider.dart';
 
 import '../widgets/battery_mold.dart';
 
-class BatteryChargingView extends StatelessWidget {
+class BatteryChargingView extends StatefulWidget {
   const BatteryChargingView({Key? key}) : super(key: key);
+
+  @override
+  State<BatteryChargingView> createState() => _BatteryChargingViewState();
+}
+
+class _BatteryChargingViewState extends State<BatteryChargingView> {
+  final double height = 200;
+
+  @override
+  void didChangeDependencies() {
+    Provider.of<EnergyBatteryState>(context).getBatteryLevel(height);
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +45,15 @@ class BatteryChargingView extends StatelessWidget {
 
   Widget _buildBatteryIcon(BuildContext context) {
     final width = MediaQuery.of(context).size.width / 3;
-    const double height = 200;
 
     final Size iconSize = Size(width, height);
 
     return Consumer<EnergyBatteryState>(
       builder: (context, batteryStateModel, child) {
+        if (batteryStateModel.isLoading) {
+          return const CircularProgressIndicator();
+        }
+
         return Stack(
           alignment: Alignment.bottomCenter,
           children: [

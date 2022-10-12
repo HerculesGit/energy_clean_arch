@@ -1,3 +1,3 @@
 abstract class BatteryClient {
-  Future<double>? getBatteryLevel();
+  Future<int>? getBatteryLevel();
 }

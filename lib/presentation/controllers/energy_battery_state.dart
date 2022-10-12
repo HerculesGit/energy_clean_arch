@@ -1,17 +1,24 @@
+import 'package:energy_clean_arch/domain/usecases/get_battery_level_usecase.dart';
 import 'package:flutter/material.dart';
 
 class EnergyBatteryState extends ChangeNotifier {
-  // bool isCharging = false;
-  // bool isFull = false;
-  // bool isEmpty = false;
+  final GetBatteryLevelUseCase _getBatteryLevelUseCase;
 
-  // double percentagePoints = 0.0;
+  EnergyBatteryState(this._getBatteryLevelUseCase);
 
-  double _level = 100;
-  double _capacity = 200;
+  bool isLoading = true;
+  int level = 0;
+  double capacity = 100.0;
 
   /// 0%=empty; 100%=full
   double get batteryLevel {
-    return ((_level * 100) / _capacity) / 100;
+    return ((level * 100) / capacity) / 100;
+  }
+
+  Future<void> getBatteryLevel(double capacity) async {
+    isLoading = true;
+    final batteryLevel = await _getBatteryLevelUseCase.call(params: null);
+    level = batteryLevel ?? 0;
+    isLoading = false;
   }
 }

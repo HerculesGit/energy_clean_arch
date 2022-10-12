@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'config/routes/app_routes.dart';
+import 'inject.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDependencies();
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => EnergyBatteryState())
+        ChangeNotifierProvider(
+            create: (context) => EnergyBatteryState(injector()))
       ],
       child: const MyApp(),
     ),

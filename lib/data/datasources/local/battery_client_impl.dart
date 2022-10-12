@@ -4,10 +4,10 @@ import 'battery_client.dart';
 
 class BatteryClientImpl implements BatteryClient {
   @override
-  Future<double>? getBatteryLevel() async {
+  Future<int>? getBatteryLevel() async {
     var battery = Battery();
     final level = await battery.batteryLevel;
 
-    return double.parse(level.toString());
+    return level;
   }
 }
