@@ -7,17 +7,17 @@ import '../../domain/models/particle.dart';
 
 class ParticleAnimationController extends ChangeNotifier {
   late Timer timer;
-  final speed = 2;
+  final speed = 0.09;
   final padding = 16.0;
 
-  bool downToUp = true;
+  bool down = true;
 
   // double value = 0.0;
   double maxDx = 0.0;
   double maxDy = 0.0;
 
-  double minDyParticlePosition = 0.0;
-  double maxDyParticlePosition = 0.0;
+  double j = 0.0;
+  double k = 0.0;
 
   bool initialized = false;
 
@@ -28,26 +28,28 @@ class ParticleAnimationController extends ChangeNotifier {
 
     _generateParticles();
     setInitialValue();
-    // timer = Timer.periodic(const Duration(milliseconds: 1000 ~/60), (timer) {
-    timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      /// tocou baixo
-      if (minDyParticlePosition >= maxDy) {
-        downToUp = false; // upToDown
-      } else if (minDyParticlePosition <= 0) {
-        /// tocou em cima
-        downToUp = true;
+    timer = Timer.periodic(const Duration(milliseconds: 1000 ~/ 60), (timer) {
+      if (k >= maxDy) {
+        down = false;
       }
 
-      if (downToUp) {
-        minDyParticlePosition += speed;
-        downToUpAnimation();
-      } else {
-        minDyParticlePosition -= speed;
+      if (j <= 0.0) {
+        down = true; // upToDown
+      }
+
+      if (down) {
+        j += speed;
+        k += speed;
         upToDownAnimation();
+      } else {
+        j -= speed;
+        k -= speed;
+        downToUpAnimation();
       }
 
-      print('minDyParticlePosition=>$minDyParticlePosition');
+      print('j =>$j');
       print('maxDy$maxDy');
+      print('k =>$k');
     });
 
     initialized = true;
@@ -103,14 +105,14 @@ class ParticleAnimationController extends ChangeNotifier {
 
   void downToUpAnimation() {
     for (var p in particles) {
-      p.position = Offset(p.position.dx, p.position.dy + speed);
+      p.position = Offset(p.position.dx, p.position.dy - speed);
     }
     notifyListeners();
   }
 
   void upToDownAnimation() {
     for (var p in particles) {
-      p.position = Offset(p.position.dx, p.position.dy - speed);
+      p.position = Offset(p.position.dx, p.position.dy + speed);
     }
     notifyListeners();
   }
@@ -121,6 +123,7 @@ class ParticleAnimationController extends ChangeNotifier {
       v.add(p.position.dy);
     }
 
-    minDyParticlePosition = v.reduce(min);
+    j = v.reduce(min);
+    k = v.reduce(max);
   }
 }
