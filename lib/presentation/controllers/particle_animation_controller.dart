@@ -7,27 +7,50 @@ import '../../domain/models/particle.dart';
 
 class ParticleAnimationController extends ChangeNotifier {
   late Timer timer;
-  final speed = 0.5;
-  double value = 0.0;
+  final speed = 2;
+  final padding = 16.0;
+
+  bool downToUp = true;
+
+  // double value = 0.0;
   double maxDx = 0.0;
   double maxDy = 0.0;
+
+  double minDyParticlePosition = 0.0;
+  double maxDyParticlePosition = 0.0;
 
   bool initialized = false;
 
   List<Particle> particles = [];
 
   init() {
-    _generateParticles();  if (initialized) return;
-    timer = Timer.periodic(const Duration(milliseconds: 1000 ~/ 60), (timer) {
-      if (value <= 10) {
-        value += speed;
+    if (initialized) return;
 
-        // updateParticlePosition();
+    _generateParticles();
+    setInitialValue();
+    // timer = Timer.periodic(const Duration(milliseconds: 1000 ~/60), (timer) {
+    timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      /// tocou baixo
+      if (minDyParticlePosition >= maxDy) {
+        downToUp = false; // upToDown
+      } else if (minDyParticlePosition <= 0) {
+        /// tocou em cima
+        downToUp = true;
       }
+
+      if (downToUp) {
+        minDyParticlePosition += speed;
+        downToUpAnimation();
+      } else {
+        minDyParticlePosition -= speed;
+        upToDownAnimation();
+      }
+
+      print('minDyParticlePosition=>$minDyParticlePosition');
+      print('maxDy$maxDy');
     });
 
     initialized = true;
-    // _generateParticles();
   }
 
   double _random(double min, double max) {
@@ -38,17 +61,12 @@ class ParticleAnimationController extends ChangeNotifier {
     particles = List.generate(
       5,
       (index) {
-        const padding = 16.0;
-
         final dx = _random(padding, maxDx - padding);
-        //= Random().nextInt((maxDx * 1.8).toInt()).toDouble();
-        final dy = _random(200, maxDy - padding);
-        //= Random().nextInt((maxDy * 2).toInt()).toDouble();
+        final dy = _random(padding, maxDy - padding);
         print('dx $dx');
         print('dx $dy');
         return Particle(color: color, radius: radius)
           ..position = Offset(dx, dy);
-
       },
     );
   }
@@ -83,10 +101,26 @@ class ParticleAnimationController extends ChangeNotifier {
     super.dispose();
   }
 
-  updateParticlePosition() {
+  void downToUpAnimation() {
     for (var p in particles) {
-      p.position = Offset(p.position.dx, p.position.dy - value);
+      p.position = Offset(p.position.dx, p.position.dy + speed);
     }
     notifyListeners();
+  }
+
+  void upToDownAnimation() {
+    for (var p in particles) {
+      p.position = Offset(p.position.dx, p.position.dy - speed);
+    }
+    notifyListeners();
+  }
+
+  setInitialValue() {
+    final List<double> v = [];
+    for (var p in particles) {
+      v.add(p.position.dy);
+    }
+
+    minDyParticlePosition = v.reduce(min);
   }
 }

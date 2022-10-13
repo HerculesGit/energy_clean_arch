@@ -19,9 +19,9 @@ class ParticlesWidget extends StatelessWidget {
         particleController.maxDy = height;
         particleController.init();
 
-        print('size --> ${width} ${height}');
-        print('maxDx --> ${particleController.maxDx } ${height}');
-        print('maxDy --> ${particleController.maxDy } ${height}');
+        // print('size --> ${width} ${height}');
+        // print('maxDx --> ${particleController.maxDx } ${height}');
+        // print('maxDy --> ${particleController.maxDy } ${height}');
 
         return Container(
           width: width,

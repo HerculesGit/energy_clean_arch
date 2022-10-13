@@ -57,6 +57,9 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
         final maxWidthSpaceToParticles =
             (MediaQuery.of(context).size.width * 0.5) - iconSize.width / 2;
 
+        final maxHeightSpaceToParticles =
+            (MediaQuery.of(context).size.height * 0.5) * 0.8;
+
         return Container(
           height: MediaQuery.of(context).size.height * 0.5,
           width: MediaQuery.of(context).size.width,
@@ -96,11 +99,11 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
                 child: Container(
                   width: (MediaQuery.of(context).size.width * 0.5) -
                       iconSize.width / 2,
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  color: Colors.red.withOpacity(0),
+                  height: maxHeightSpaceToParticles,
+                  color: Colors.red.withOpacity(0.2),
                   child: ParticlesWidget(
                     width: maxWidthSpaceToParticles,
-                    height: MediaQuery.of(context).size.height * 0.5,
+                    height: maxHeightSpaceToParticles,
                   ),
                 ),
               ),
@@ -112,11 +115,11 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
                 child: Container(
                   width: (MediaQuery.of(context).size.width * 0.5) -
                       iconSize.width / 2,
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  color: Colors.green.withOpacity(0),
+                  height: maxHeightSpaceToParticles,
+                  color: Colors.green.withOpacity(.2),
                   child: ParticlesWidget(
                     width: maxWidthSpaceToParticles,
-                    height: MediaQuery.of(context).size.height * 0.5,
+                    height: maxHeightSpaceToParticles,
                   ),
                 ),
               ),
