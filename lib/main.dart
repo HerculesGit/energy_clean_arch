@@ -1,10 +1,10 @@
-import 'package:energy_clean_arch/data/datasources/local/battery_client_impl.dart';
 import 'package:energy_clean_arch/presentation/controllers/energy_battery_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'config/routes/app_routes.dart';
 import 'inject.dart';
+import 'presentation/controllers/particle_animation_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +14,9 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (context) => EnergyBatteryState(injector()))
+            create: (context) => EnergyBatteryState(injector())),
+        ChangeNotifierProvider(
+            create: (context) => ParticleAnimationController())
       ],
       child: const MyApp(),
     ),

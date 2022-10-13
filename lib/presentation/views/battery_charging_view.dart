@@ -1,5 +1,6 @@
 import 'package:energy_clean_arch/config/themes.dart';
 import 'package:energy_clean_arch/presentation/controllers/energy_battery_state.dart';
+import 'package:energy_clean_arch/presentation/widgets/particle_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,17 +24,16 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        'w=${MediaQuery.of(context).size.width} h=${MediaQuery.of(context).size.height}');
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppTheme.backgroundColor,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildBody(context),
-            ],
-          ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            _buildBody(context),
+          ],
         ),
       ),
     );
@@ -54,36 +54,74 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
           return const CircularProgressIndicator();
         }
 
-        return Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            /// build background layer
-            SizedBox.fromSize(size: iconSize, child: _buildBackgroundLayer()),
+        final maxWidthSpaceToParticles =
+            (MediaQuery.of(context).size.width * 0.5) - iconSize.width / 2;
 
-            /// build charging effect layer
-            SizedBox.fromSize(
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.5,
+          width: MediaQuery.of(context).size.width,
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              /// build background layer
+              SizedBox.fromSize(size: iconSize, child: _buildBackgroundLayer()),
+
+              /// build charging effect layer
+              SizedBox.fromSize(
+                  size: Size(
+                    iconSize.width,
+                    iconSize.height * batteryStateModel.batteryLevel,
+                  ),
+                  child: _buildChargingDegradeLayer()),
+
+              /// build mold layer
+              SizedBox(
+                height: iconSize.height,
+                width: iconSize.width,
+                child: const BatteryMold(),
+              ),
+
+              /// build light layer
+              SizedBox.fromSize(
                 size: Size(
                   iconSize.width,
                   iconSize.height * batteryStateModel.batteryLevel,
                 ),
-                child: _buildChargingDegradeLayer()),
-
-            /// build mold layer
-            SizedBox(
-              height: iconSize.height,
-              width: iconSize.width,
-              child: const BatteryMold(),
-            ),
-
-            /// build light layer
-            SizedBox.fromSize(
-              size: Size(
-                iconSize.width,
-                iconSize.height * batteryStateModel.batteryLevel,
+                child: _buildLightLayer(),
               ),
-              child: _buildLightLayer(),
-            ),
-          ],
+
+              /// left
+              Positioned(
+                left: 0,
+                child: Container(
+                  width: (MediaQuery.of(context).size.width * 0.5) -
+                      iconSize.width / 2,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  color: Colors.red.withOpacity(0),
+                  child: ParticlesWidget(
+                    width: maxWidthSpaceToParticles,
+                    height: MediaQuery.of(context).size.height * 0.5,
+                  ),
+                ),
+              ),
+
+              /// right
+              Positioned(
+                // left: maxWidthOfTheRightParticles,
+                right: 0,
+                child: Container(
+                  width: (MediaQuery.of(context).size.width * 0.5) -
+                      iconSize.width / 2,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  color: Colors.green.withOpacity(0),
+                  child: ParticlesWidget(
+                    width: maxWidthSpaceToParticles,
+                    height: MediaQuery.of(context).size.height * 0.5,
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
