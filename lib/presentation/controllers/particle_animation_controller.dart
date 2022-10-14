@@ -47,9 +47,9 @@ class ParticleAnimationController extends ChangeNotifier {
         downToUpAnimation();
       }
 
-      print('j =>$j');
-      print('maxDy$maxDy');
-      print('k =>$k');
+      // print('j =>$j');
+      // print('maxDy$maxDy');
+      // print('k =>$k');
     });
 
     initialized = true;

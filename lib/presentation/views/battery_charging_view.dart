@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/battery_mold.dart';
+import '../widgets/title_legend_widget.dart';
 
 class BatteryChargingView extends StatefulWidget {
   const BatteryChargingView({Key? key}) : super(key: key);
@@ -26,10 +27,28 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
   Widget build(BuildContext context) {
     print(
         'w=${MediaQuery.of(context).size.width} h=${MediaQuery.of(context).size.height}');
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppTheme.backgroundColor,
-        body: _buildBatteryIcon(context),
+    return Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
+      body: Column(
+        children: [
+          _buildBatteryIcon(context),
+          Padding(
+            padding: const EdgeInsets.only(top: 32.0 * 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [_buildTimeToFullCharge(), _buildChargingRange()],
+            ),
+          ),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Image.asset(
+                'assets/images/electric_car.png',
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -154,4 +173,12 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
       );
 
   Widget _buildLightLayer() => Container(decoration: AppTheme.lightEffect);
+
+  /// fake
+  Widget _buildTimeToFullCharge() =>
+      const TitleLegend(title: '0h 23 min', legend: 'Time to full charge');
+
+  /// fake
+  Widget _buildChargingRange() => const TitleLegend(
+      title: '134 km', titleColor: Color(0xFF259D5B), legend: 'Charging range');
 }

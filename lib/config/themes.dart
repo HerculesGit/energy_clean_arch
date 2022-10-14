@@ -9,6 +9,16 @@ class AppTheme {
 
   static Color get batteryBackgroundColor => const Color(0xFF1B2432);
 
+  static Color get whiteColor => Colors.white;
+
+  static TextStyle get titleStyle => TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 24,
+        color: whiteColor,
+      );
+
+  static TextStyle get textStyle => TextStyle(color: whiteColor);
+
   static Gradient get chargingEffect => const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
