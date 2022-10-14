@@ -19,8 +19,14 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<EnergyBatteryState>(context).getBatteryLevel(height);
     super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    Provider.of<EnergyBatteryState>(context, listen: false)
+        .getBatteryLevel(height);
+    super.initState();
   }
 
   @override
@@ -98,12 +104,12 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
               SizedBox.fromSize(size: iconSize, child: _buildBackgroundLayer()),
 
               /// build charging effect layer
-              SizedBox.fromSize(
-                  size: Size(
-                    iconSize.width,
-                    iconSize.height * batteryStateModel.batteryLevel,
-                  ),
-                  child: _buildChargingDegradeLayer()),
+              _buildChargingDegradeLayer(
+                size: Size(
+                  iconSize.width,
+                  iconSize.height * batteryStateModel.batteryLevel,
+                ),
+              ),
 
               /// build mold layer
               SizedBox(
@@ -165,7 +171,11 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
         ),
       );
 
-  Widget _buildChargingDegradeLayer() => Container(
+  Widget _buildChargingDegradeLayer({required Size size}) => AnimatedContainer(
+        width: size.width,
+        height: size.height,
+        curve: Curves.easeOutCubic,
+        duration: const Duration(seconds: 2),
         decoration: BoxDecoration(
           backgroundBlendMode: BlendMode.src,
           gradient: AppTheme.chargingEffect,
