@@ -9,6 +9,7 @@ class ParticleAnimationController extends ChangeNotifier {
   late Timer timer;
   final speed = 0.09;
   final padding = 16.0;
+  bool animationIsProgressing = false;
 
   bool down = true;
 
@@ -23,11 +24,25 @@ class ParticleAnimationController extends ChangeNotifier {
 
   List<Particle> particles = [];
 
+  @override
+  dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   init() {
     if (initialized) return;
-
     _generateParticles();
     setInitialValue();
+    Future.delayed(const Duration(seconds: 1))
+        .then((value) => startPlatformAnimation());
+    initialized = true;
+  }
+
+  startPlatformAnimation() async {
+    animationIsProgressing = true;
+    notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 500));
     timer = Timer.periodic(const Duration(milliseconds: 1000 ~/ 60), (timer) {
       if (k >= maxDy) {
         down = false;
@@ -51,9 +66,10 @@ class ParticleAnimationController extends ChangeNotifier {
       // print('maxDy$maxDy');
       // print('k =>$k');
     });
-
-    initialized = true;
+    notifyListeners();
   }
+
+  double get opacity => animationIsProgressing ? 1.0 : 0.0;
 
   double _random(double min, double max) {
     return min + Random().nextInt(max.toInt() - min.toInt());
@@ -95,12 +111,6 @@ class ParticleAnimationController extends ChangeNotifier {
   double get radius {
     final position = Random.secure().nextInt(_rangeRadius.length);
     return _rangeRadius[position];
-  }
-
-  @override
-  dispose() {
-    timer.cancel();
-    super.dispose();
   }
 
   void downToUpAnimation() {

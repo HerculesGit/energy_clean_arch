@@ -26,8 +26,12 @@ class ParticlesWidget extends StatelessWidget {
         return Container(
           width: width,
           // color: Colors.red,
-          child: CustomPaint(
-            painter: ParticlePainter(particles: particleController.particles),
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 500),
+            opacity: particleController.opacity,
+            child: CustomPaint(
+              painter: ParticlePainter(particles: particleController.particles),
+            ),
           ),
         );
       },
