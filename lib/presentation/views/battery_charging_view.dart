@@ -63,11 +63,13 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
     final width = MediaQuery.of(context).size.width / 3;
 
     final Size iconSize = Size(width, height);
+    final double batteryRegion = MediaQuery.of(context).size.height * 0.5;
 
     return Consumer<EnergyBatteryState>(
       builder: (context, batteryStateModel, child) {
         if (batteryStateModel.isLoading) {
-          return const CircularProgressIndicator();
+          /// the blank space
+          return SizedBox(height: batteryRegion);
         }
 
         final maxWidthSpaceToParticles =
@@ -78,7 +80,7 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
 
         return SizedBox(
           // color: Colors.red,
-          height: MediaQuery.of(context).size.height * 0.5,
+          height: batteryRegion,
           width: MediaQuery.of(context).size.width,
           child: Stack(
             alignment: Alignment.bottomCenter,
