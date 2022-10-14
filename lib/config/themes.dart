@@ -22,7 +22,7 @@ class AppTheme {
   static Decoration get lightEffect => const BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Color(0x734CCBA9),
+            color: Color(0xA64CCBA9),
             blurRadius: 100,
             offset: Offset(0, 4),
           ),

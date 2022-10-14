@@ -29,18 +29,9 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppTheme.backgroundColor,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            _buildBody(context),
-          ],
-        ),
+        body: _buildBatteryIcon(context),
       ),
     );
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return _buildBatteryIcon(context);
   }
 
   Widget _buildBatteryIcon(BuildContext context) {
@@ -58,14 +49,32 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
             (MediaQuery.of(context).size.width * 0.5) - iconSize.width / 2;
 
         final maxHeightSpaceToParticles =
-            (MediaQuery.of(context).size.height * 0.5) * 0.8;
+            (MediaQuery.of(context).size.height * 0.4) * 0.8;
 
-        return Container(
+        return SizedBox(
+          // color: Colors.red,
           height: MediaQuery.of(context).size.height * 0.5,
           width: MediaQuery.of(context).size.width,
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
+              Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  Positioned(
+                    top: -iconSize.height * 0.2,
+                    // top: -100,
+                    child: SizedBox.fromSize(
+                      size: Size(
+                        iconSize.width,
+                        iconSize.height * batteryStateModel.batteryLevel,
+                      ),
+                      child: _buildLightLayer(),
+                    ),
+                  ),
+                ],
+              ),
+
               /// build background layer
               SizedBox.fromSize(size: iconSize, child: _buildBackgroundLayer()),
 
@@ -100,7 +109,7 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
                   width: (MediaQuery.of(context).size.width * 0.5) -
                       iconSize.width / 2,
                   height: maxHeightSpaceToParticles,
-                  color: Colors.red.withOpacity(0.2),
+                  color: Colors.red.withOpacity(0),
                   child: ParticlesWidget(
                     width: maxWidthSpaceToParticles,
                     height: maxHeightSpaceToParticles,
@@ -116,7 +125,7 @@ class _BatteryChargingViewState extends State<BatteryChargingView> {
                   width: (MediaQuery.of(context).size.width * 0.5) -
                       iconSize.width / 2,
                   height: maxHeightSpaceToParticles,
-                  color: Colors.green.withOpacity(.2),
+                  color: Colors.green.withOpacity(0),
                   child: ParticlesWidget(
                     width: maxWidthSpaceToParticles,
                     height: maxHeightSpaceToParticles,
